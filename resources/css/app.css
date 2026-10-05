@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Police "cinématographique" : une serif classique pour le récit, sans
+   dépendance externe lourde — la police système suffit, on reste léger. */
+:root {
+    --ease-story: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body {
+    font-family: 'Georgia', 'Iowan Old Style', serif;
+}
+
+/* Apparitions douces au scroll, utilisées via data-reveal + chapters.js */
+[data-reveal] {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.8s var(--ease-story), transform 0.8s var(--ease-story);
+}
+[data-reveal].is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Timeline (chapitres 01 et 05) */
+.timeline-year {
+    opacity: 0.5;
+    transition: opacity 0.4s ease;
+}
+.timeline-year.is-active {
+    opacity: 1;
+}
+
+/* Dossiers (chapitre 03) : léger effet au clic "Qui est-ce ?" */
+[data-who-is-it] {
+    transition: transform 0.3s var(--ease-story);
+}
+[data-who-is-it].revealed {
+    transform: scale(1.02);
+}
+
+/* Montage (chapitre 07) : slides en fondu enchaîné */
+[data-montage-slide] {
+    opacity: 0;
+    transition: opacity 1s ease;
+    position: absolute;
+    inset: 0;
+}
+[data-montage-slide].is-active {
+    opacity: 1;
+    position: relative;
+}
+
+/* Capsule : petite apparition à l'ouverture */
+[data-capsule-unlocked] {
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+[data-capsule-unlocked].is-open {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Respect des préférences de réduction de mouvement */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+.story-slide {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1s ease;
+}
+.story-slide.is-active {
+    opacity: 1;
+    pointer-events: auto;
+}
+/* Variantes d'animation aleatoires pour le defilement (story.play) */
+.story-slide {
+    transition: opacity 1.2s ease, transform 1.2s ease;
+}
+.story-slide.anim-kenburns { transform: scale(1); }
+.story-slide.anim-kenburns.is-active { transform: scale(1.08); }
+
+.story-slide.anim-slide { transform: translateX(50px); }
+.story-slide.anim-slide.is-active { transform: translateX(0); }
+
+.story-slide.anim-zoomslide { transform: translateX(30px) scale(0.94); }
+.story-slide.anim-zoomslide.is-active { transform: translateX(0) scale(1.05); }
